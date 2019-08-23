@@ -1,0 +1,4 @@
+# Database of installed ports
+# Format of entries:
+# portname:arch:version
+

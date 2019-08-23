@@ -1,0 +1,4 @@
+#!/bin/rc
+# Build a port
+# usage: prt-mk [foo/bar]
+

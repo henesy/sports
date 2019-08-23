@@ -1,0 +1,4 @@
+#!/bin/rc
+# Delete a port 
+# usage: prt-del [foo/bar]
+

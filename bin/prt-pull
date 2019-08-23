@@ -1,0 +1,4 @@
+#!/bin/rc
+# Update the ports tree rooted at $ports
+# usage: prt-pull
+
