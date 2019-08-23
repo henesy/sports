@@ -1,0 +1,18 @@
+#!/bin/rc
+# Search for strings of text in port files
+# The -H option searches only headers of port files
+# usage: port/grep [-H] some strings of text
+
+header=''
+
+while(! ~ $#* 0) {
+	switch ($1) {
+	case -H
+		header=yes
+		shift
+	case -*
+		echo usage: port/grep [-H] some strings of text
+		exit usage
+	}
+	shift
+}

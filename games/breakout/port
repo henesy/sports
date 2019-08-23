@@ -6,11 +6,11 @@ name=breakout
 version=1
 source='http://9.postnix.pw/code/ports/breakout.tgz'
 type=archive
-workroot=work/breakout
+workroot=breakout
 notice=`{fortune}
 depends=()
 
-sha256sum='515899a0959cdf703b61e893662b69d42160b30aa63cf656cfd3719ecc7fd32dc79958a713a1bf4c338a54a658bb802daa0811a4c8459ecbd7643bc1b7b1b889'
+sha512sum='515899a0959cdf703b61e893662b69d42160b30aa63cf656cfd3719ecc7fd32dc79958a713a1bf4c338a54a658bb802daa0811a4c8459ecbd7643bc1b7b1b889'
 
 fn build {
 	mk

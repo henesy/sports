@@ -27,42 +27,42 @@ For a user-specific installation, you could add the following to your `$home/pro
 
 Update the ports tree:
 
-	% prt-pull
+	% port/pull
 
 Install a port from somewhere outside the ports tree:
 
-	% prt-inst games/breakout
+	% port/inst games/breakout
 
 Install a port from a port's directory:
 
 	% cd $ports/games/breakout
-	% prt-inst
+	% port/inst
 
 Delete a port from somewhere outside the ports tree:
 
-	% prt-del games/breakout
+	% port/del games/breakout
 
 Delete a port from a port's directory: 
 
 	% cd $ports/games/breakout
-	% prt-del
+	% port/del
 
 Get info about a port:
 
-	% prt-info games/breakout
+	% port/info games/breakout
 
 Explicitly build a port from outside the ports tree:
 
-	% prt-mk games/breakout
+	% port/mk games/breakout
 
 Explicitly build a port from the port's directory:
 
 	% cd $ports/games/breakout
-	% prt-mk
+	% port/mk
 
 Search for text in a port:
 
-	% prt-grep breakout
+	% port/grep breakout
 	...
 	%
 
@@ -70,9 +70,9 @@ Search for text in a port:
 
 Each port lives in a directory under the `$ports` root directory as per `$ports/category-subcategory/portname`. 
 
-Every port directory has a `prtfile` which is ingested by the `prt-*` scripts. 
+Every port directory has a `port` file which is ingested by the `ports/*` scripts. 
 
-A port may also contain a `patches/` directory which may be ingested by a `patch` function in the `prtfile` as described later. 
+A port may also contain a `patches/` directory which may be ingested by a `patch` function in the `port` file as described later. 
 
 Functions are called from the `$workroot` directory of the port. 
 
@@ -91,13 +91,15 @@ name -- The name of the port to install.
 
 version -- For archive or 9p type ports, this is should be the release version. For git or hg type ports, this should be the commit hash of the target version to checkout upon cloning time. 
 
-source -- The URL or dialstring for the port's source code. 
+source -- The URL or dialstring^/$path for the port's source code. An example 9p source is: `tcp!9p.io/foo/bar`. 
 
 type -- Type of port source, valid options are: archive, git, hg, 9p. This may be removed in the future. 
 
-workroot -- The directory, relative to the port's directory, in which the build, etc. functions should be called. 
+workroot -- The directory, relative to the port's `work/` directory, in which the build, etc. functions should be called. 
 
 ### Optional variables
+
+sha512sum -- A checksum of your source archive, if present. Source archives are recommended rather than cloning. 
 
 depends -- Should contain a valid rc(1) list of all ports which must be installed for this port to be installed. 
 
@@ -121,7 +123,7 @@ patch -- This function is called before `build()` and should be used if a `patch
 
 You can do a full install of the ports tree to evaluate if the builds are working with:
 
-	% prt-inst *
+	% port/inst *
 
 ## Contributing
 

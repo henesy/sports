@@ -1,4 +1,4 @@
 #!/bin/rc
 # Print header information about a port
-# usage: prt-info [foo/bar]
+# usage: port/info [foo/bar]
 

@@ -1,0 +1,115 @@
+#!/bin/rc
+# Build a port
+# usage: port/mk [foo/bar ...]
+rfork n;
+
+# Utility functions
+fn untgz {
+	fname = `{filename $1}
+	hget $1 > $fname
+	validsum $fname
+	tar -zxf $fname
+}
+
+fn untbz {
+	fname = `{filename $1}
+	hget $1 > $fname
+	validsum $fname
+	cat | bunzip2 | tar -x
+}
+
+fn dezip {
+	fname = `{filename $1}
+	hget $1 > $fname
+	validsum $fname
+	unzip -f $fname
+}
+
+# Main logic
+
+if(~ $ports '') {
+	echo '$ports variable not set, aborting.'
+	exit '$ports variable not set'
+}
+
+. $ports^/lib/port-common
+
+dirs=(`{pwd})
+
+# If we have arguments, they're ports to install
+if(! ~ $#* 0) {
+	dirs = $ports^'/'^$*
+}
+
+for(d in $dirs) {
+	if(! test -e $d) {
+		exits 'dir does not exist: '^$d
+	}
+	
+	if(! test -e $d/port) {
+		exits 'port file does not exist: '^$d^'/port'
+	}
+
+	cd $d
+	. ./port
+	
+	# Fetch
+	echo Fetching port: $name
+
+	mkdir work
+	cd work
+
+	# Skip if not downloading and extracting
+	if(! test -e $workroot) {
+		switch($type) {
+		case archive
+			# Download and extract the archive file
+			ext = `{extension $fname}
+	
+			echo Downloading from: $source
+	
+			# Choose how we unpack the file
+			switch($ext) {
+			case .tar.gz
+				untgz $source
+			case .tgz
+				untgz $source
+			case .tar.bz2
+				untbz $source
+			case .tbz
+				untbz $source
+			case .tbz2
+				untbz $source
+			case .zip
+				dezip $source
+			case *
+				exits 'Unknown file extension: '^$ext
+			}
+	
+		case git
+			exits not implemented
+	
+		case hg
+			exits not implemented
+	
+		case 9p
+			# Form: tcp!9p.io/foo/bar
+			exits not implemented
+	
+		case *
+			exits 'Invalid $type in port file: '^$type
+		}
+
+	}
+	if not {
+		echo 'Workroot already populated, skipping download.'
+	}
+	
+	# Build
+	echo Building port: $name
+	cd $workroot
+	
+	build
+	
+	echo Build for $name done.
+}

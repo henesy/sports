@@ -1,6 +1,0 @@
-#!/bin/rc
-# Search for strings of text in prtfiles
-# The -H option searches only headers of prtfiles
-# usage: prt-grep [-H] some strings of text
-
-

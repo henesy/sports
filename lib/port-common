@@ -1,0 +1,77 @@
+# Common functions for port/* commands
+
+fn validatedb {
+	n = 0
+	lines = `{cat $ports/ports.db}
+	for(l in $lines) {
+		n = `{echo $n '+1' | bc}
+		
+		# TODO - further validation
+		nf = `{echo $l | awk '{print NF}'}
+		if(! ~ $nf 3)
+			exits 'Corrupt line in db: '^$ports^'/ports.db:'^$n
+	}
+}
+
+# Checks if a port is installed
+fn installed {
+	validatedb
+
+	res = `{grep $name $ports/ports.db}
+	for(r in $res) {
+		n = `{echo $r | awk -F ':' '{print $1}'}
+		o = `{echo $r | awk -F ':' '{print $2}'}
+		v = `{echo $r | awk -F ':' '{print $3}'}
+		
+		# TODO - condense
+		if(~ $name $n) {
+			if(~ $o $objtype) {
+				if(~ $v $version) {
+					exits 'Port name:objtype:version combination already installed, aborting.'
+				}
+			}
+		}
+	}
+}
+
+# Echo and exit a status message
+fn exits {
+	echo $1
+	exit $1
+}
+
+# Get name of file in path: bar.tgz in foo/bar.tgz
+fn filename {
+	echo $1 | 
+	awk '
+	function basename(file, a, n) {
+		n = split(file, a, "/")
+		return a[n]
+	}
+	{
+		print basename($0)
+	}
+	'
+}
+
+# Get extension for a file: .tar.gz in foo.tar.gz
+fn extension {
+	echo $1 | 
+	awk -F '.' '
+	{
+		for(i = 2; i <= NF; i++) {
+			printf(".%s", $i)
+		}
+		printf("\n")
+	}
+	'
+}
+
+# Sha512 checksum check
+fn validsum {
+	sum = `{sha1sum -2 512 $1 | awk '{print $1}'}
+	if(! ~ $sum $sha512sum) {
+		exits 'Checksum mismatch! Got: '^$sum
+	}
+	echo Checksum matched.
+}

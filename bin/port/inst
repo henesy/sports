@@ -1,0 +1,7 @@
+#!/bin/rc
+# Install a port 
+# usage: port/inst [foo/bar]
+
+# Check if port is installed
+if(! ~ `{installed $name} no)
+	exits 'Port '^$name^' is already installed, aborting.'
