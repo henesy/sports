@@ -28,6 +28,14 @@ For a user-specific installation, you could add the following to your `$home/pro
 Update the ports tree:
 
 	% port/pull
+	
+List all available ports in the tree:
+
+	% port/list -a
+
+List all installed ports:
+
+	% port/list
 
 Install a port from somewhere outside the ports tree:
 
@@ -87,7 +95,7 @@ Maintainer -- The port maintainer, if you are submitting a new port, this is you
 
 ### Required variables
 
-name -- The name of the port to install. 
+name -- The name of the port to install. This may not contain colons as ':' is used as a separator in ports.db. 
 
 version -- For archive or 9p type ports, this is should be the release version. For git or hg type ports, this should be the commit hash of the target version to checkout upon cloning time. 
 

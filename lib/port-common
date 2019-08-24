@@ -1,5 +1,19 @@
 # Common functions for port/* commands
 
+# List all available ports
+fn allports {
+	du | awk '{print $2}' | grep -v '*./.git' | grep -v '^.$' | grep -v 'root' | grep -v 'lib' | grep -v 'bin' | sed 's/^.\///g' | grep '/'
+}
+
+# List all installed ports from ports.db raw
+fn allinstalled {
+	lines = `{cat $ports/ports.db | grep -v '^#' | grep -v '^stub:*'}
+	for(l in $lines) {
+		echo $l
+	}
+}
+
+# Validate if the ports.db is un-corrupted
 fn validatedb {
 	n = 0
 	lines = `{cat $ports/ports.db}
@@ -14,10 +28,12 @@ fn validatedb {
 }
 
 # Checks if a port is installed
+# yes|no = installed(name)
 fn installed {
 	validatedb
 
-	res = `{grep $name $ports/ports.db}
+	out = no
+	res = `{grep $1 $ports/ports.db}
 	for(r in $res) {
 		n = `{echo $r | awk -F ':' '{print $1}'}
 		o = `{echo $r | awk -F ':' '{print $2}'}
@@ -27,11 +43,12 @@ fn installed {
 		if(~ $name $n) {
 			if(~ $o $objtype) {
 				if(~ $v $version) {
-					exits 'Port name:objtype:version combination already installed, aborting.'
+					out = 'yes'
 				}
 			}
 		}
 	}
+	echo $out
 }
 
 # Echo and exit a status message

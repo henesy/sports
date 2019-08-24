@@ -1,0 +1,62 @@
+#!/bin/rc
+# List installed ports, may also list all ports
+# usage: port/list [-a] [foo/bar]
+rfork n;
+
+# Utility functions
+
+# foo/bar = getprefix(bar)
+fn getprefix {
+	echo `{allports | grep $1}
+}
+
+# Import
+
+if(~ $ports '') {
+	echo '$ports variable not set, aborting.'
+	exit '$ports variable not set'
+}
+
+. $ports^/lib/port-common
+
+# Main logic
+
+all = no
+quiet = no
+
+while(! ~ $#* 0) {
+	switch ($1) {
+	case -a
+		# List all installed ports
+		all = yes
+		shift
+	case -q
+		# Don't print column titles
+		quiet = yes
+		shift
+	case -*
+		echo usage: port/list [-a]
+		exit usage
+	}
+	shift
+}
+
+cd $ports
+
+if(~ $all yes) {
+	allports
+	exit
+}
+
+if(~ $quiet no) {
+	echo 'name			objtype	version'
+}
+
+inst = `{allinstalled}
+for(p in $inst) {
+	n = `{echo $p | awk -F ':' '{print $1}'}
+	o = `{echo $p | awk -F ':' '{print $2}'}
+	v = `{echo $p | awk -F ':' '{print $3}'}
+	fulln = `{getprefix $n}
+	echo $fulln^'	'^$o^'		'^$v
+}
