@@ -71,8 +71,6 @@ Explicitly build a port from the port's directory:
 Search for text in a port:
 
 	% port/grep breakout
-	...
-	%
 
 ## Writing ports
 

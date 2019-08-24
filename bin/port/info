@@ -1,4 +1,22 @@
 #!/bin/rc
 # Print header information about a port
-# usage: port/info [foo/bar]
+# usage: port/info foo/bar
 rfork n;
+
+# Import
+
+if(~ $ports '') {
+	echo '$ports variable not set, aborting.'
+	exit '$ports variable not set'
+}
+
+. $ports^/lib/port-common
+
+# Main logic
+
+if(! ~ $#* 1) {
+	exits 'usage: port/info foo/bar'
+}
+
+# Read top 5 lines in case there are a few other useful headers, only 3 lines expected
+sed 5q $ports/$1/port | grep '^#' | sed 's/^# //g'
