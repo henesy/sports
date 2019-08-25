@@ -1,4 +1,44 @@
 #!/bin/rc
 # Update the ports tree rooted at $ports
 # usage: port/pull
+rfork n;
 
+# Import
+
+if(~ $ports '') {
+	echo '$ports variable not set, aborting.'
+	exit '$ports variable not set'
+}
+
+. $ports^/lib/port-common
+
+# Main logic
+
+if(! test -e $ports/ports.cfg) {
+	exits $ports^'/ports.cfg does not exist, will not continue'
+}
+
+. $ports/ports.cfg
+
+cd $ports
+
+switch($git) {
+case git
+	if(! test -e /bin/$git) {
+		exits 'Could not find dgit executable: /bin/'^$git^' -- manual update required'
+	}
+
+	git pull
+
+case dgit
+	# Driusan's dgit is syntactically similar to git proper
+	if(! test -e /bin/$git) {
+		exits 'Could not find dgit executable: /bin/'^$git^' -- manual update required'
+	}
+
+	dgit pull
+
+case *
+	exits 'Unknown git='^$git^' type in ports.cfg, please send a patch'
+
+}
