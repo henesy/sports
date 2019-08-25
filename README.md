@@ -115,9 +115,9 @@ notice -- An optional message to provide to the user after `install()` is called
 
 build -- Should fully build the port from source. Note that you'll be cd(1)'d into `$workroot` before this is called. 
 
-install -- Should install the port to `$ports/root` in a form consistent with the Plan 9 filesystem layout. 
+install -- Should install the port to `$ports/root` in a form consistent with the Plan 9 filesystem layout. Note that you'll be cd(1)'d into `$workroot` before this is called. 
 
-uninstall -- Should completely uninstall the port from `$ports/root` in a manner which affects only the port currently being uninstalled, so no wildcards, etc. Note that you will not be cd(1)'d into `$workroot` as the directory may not exist. 
+uninstall -- Should completely uninstall the port from `$ports/root` in a manner which affects only the port currently being uninstalled, so no wildcards, etc. Note that you will __not__ be cd(1)'d into `$workroot` as the directory may not exist. 
 
 ### Optional functions
 

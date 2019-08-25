@@ -7,7 +7,7 @@ version=1
 source='http://9.postnix.pw/code/ports/breakout.tgz'
 type=archive
 workroot=breakout
-notice=`{fortune}
+notice='Breakout now available as % games/breakout'
 depends=()
 
 sha512sum='515899a0959cdf703b61e893662b69d42160b30aa63cf656cfd3719ecc7fd32dc79958a713a1bf4c338a54a658bb802daa0811a4c8459ecbd7643bc1b7b1b889'
@@ -17,7 +17,8 @@ fn build {
 }
 
 fn install {
-	mk install
+	mkdir -p $ports/root/bin/games
+	cp 8.out $ports/root/bin/games/breakout
 }
 
 fn clean {
@@ -25,8 +26,7 @@ fn clean {
 }
 
 fn uninstall {
-	cd work/$workroot
-	mk uninstall
+	rm $ports/root/bin/games/breakout
 }
 
 fn patch {

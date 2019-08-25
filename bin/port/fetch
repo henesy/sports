@@ -1,6 +1,6 @@
 #!/bin/rc
 # Install a port 
-# usage: port/inst [foo/bar]
+# usage: port/fetch [foo/bar]
 rfork n;
 
 # Import
@@ -33,26 +33,9 @@ for(d in $dirs) {
 	cd $d
 	. ./port
 	
-	# Install
+	# Fetch
 
-	# Check if port is installed
-	if(! ~ `{installed $name} no) {
-		exits 'Port '^$name^' is already installed, aborting.'
-	}
-
-	echo Installing port: $name
+	echo Fetching port: $name
 	
-	port/mk
-	
-	cd work/$workroot
-	install
-	
-	dbstr = $name^':'^$objtype^':'^$version
-	dbadd $dbstr
-	
-	echo 'Install done for port: '^$name
-	
-	if(! ~ $notice '') {
-		echo $notice
-	}
+	exits 'not impl'
 }

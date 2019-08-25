@@ -108,6 +108,16 @@ for(d in $dirs) {
 		echo 'Workroot already populated, skipping download.'
 	}
 	
+	# Patch
+	if(test -e patches) {
+		echo Patching port: $name
+		patch
+		echo Patching done for port: $name
+	}
+	if not {
+		echo Nothing to patch, skipping patch step. 
+	}
+	
 	# Build
 	echo Building port: $name
 	cd $workroot

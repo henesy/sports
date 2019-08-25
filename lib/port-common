@@ -16,10 +16,25 @@ fn dbunlock {
 
 # Remove a dbstr from the ports.db
 fn dbrm {
+	if(! ~ $#* 1) {
+		exits 'Need a dbstr argument to dbrm'
+	}
+
 	dblock
 	tmpdb = '/tmp/ports.db.'^$pid
-	sed 's/^'^$dbstr^'//' $ports/ports.db > $tmpdb
+	sed 's/^'^$1^'//' $ports/ports.db > $tmpdb
 	mv $tmpdb $ports/ports.db
+	dbunlock
+}
+
+# Add a dbstr to the ports.db
+fn dbadd {
+	if(! ~ $#* 1) {
+		exits 'Need a dbstr argument to dbadd'
+	}
+
+	dblock
+	echo $1 >> $ports/ports.db
 	dbunlock
 }
 
