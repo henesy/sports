@@ -25,6 +25,7 @@ fn clean {
 }
 
 fn uninstall {
+	cd work/$workroot
 	mk uninstall
 }
 

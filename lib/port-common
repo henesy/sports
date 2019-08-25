@@ -1,5 +1,28 @@
 # Common functions for port/* commands
 
+# Lock the db
+fn dblock {
+	if(~ test -e $ports/ports.db.lock) {
+		exits 'Found existing lock on ports.db, aborting'
+	}
+
+	touch $ports/ports.db.lock
+}
+
+# Unlock the db
+fn dbunlock {
+	rm $ports/ports.db.lock
+}
+
+# Remove a dbstr from the ports.db
+fn dbrm {
+	dblock
+	tmpdb = '/tmp/ports.db.'^$pid
+	sed 's/^'^$dbstr^'//' $ports/ports.db > $tmpdb
+	mv $tmpdb $ports/ports.db
+	dbunlock
+}
+
 # List all available ports
 fn allports {
 	du | awk '{print $2}' | grep -v '*./.git' | grep -v '^.$' | grep -v 'root' | grep -v 'lib' | grep -v 'bin' | sed 's/^.\///g' | grep '/'
@@ -16,19 +39,19 @@ fn allinstalled {
 # Validate if the ports.db is un-corrupted
 fn validatedb {
 	n = 0
-	lines = `{cat $ports/ports.db}
+	lines = `{cat $ports/ports.db | grep -v '^#'}
 	for(l in $lines) {
 		n = `{echo $n '+1' | bc}
 		
 		# TODO - further validation
-		nf = `{echo $l | awk '{print NF}'}
+		nf = `{echo $l | awk -F ':' '{print NF}'}
 		if(! ~ $nf 3)
 			exits 'Corrupt line in db: '^$ports^'/ports.db:'^$n
 	}
 }
 
 # Checks if a port is installed
-# yes|no = installed(name)
+# yes|no = installed(name objtype version)
 fn installed {
 	validatedb
 

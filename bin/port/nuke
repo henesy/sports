@@ -1,6 +1,6 @@
 #!/bin/rc
-# Delete a port 
-# usage: port/del [foo/bar]
+# Nuke a port
+# usage: port/nuke [foo/bar]
 rfork n;
 
 # Import
@@ -33,21 +33,14 @@ for(d in $dirs) {
 	cd $d
 	. ./port
 		
-	# Delete
-	dbstr = $name^':'^$objtype^':'^$version
-	
-	if(! ~ `{installed $name $objtype $version} yes) {
-		exits 'Port is not installed: '^$dbstr
+	# Nuke
+	if(! test -e ./work) {
+		exits 'Nothing to nuke for port: '^$name
 	}
 	
-	echo 'Starting uninstall of port: '^$name
+	echo 'Starting nuke of port: '^$name
 	
-	uninstall
+	rm -r ./work
 	
-	cd $d
-	port/nuke
-	
-	dbrm $dbstr
-	
-	echo 'Uninstall done for port: '^$name
+	echo 'Nuke done for port: '^$name
 }

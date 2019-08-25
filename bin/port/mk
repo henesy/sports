@@ -58,7 +58,7 @@ for(d in $dirs) {
 	# Fetch
 	echo Fetching port: $name
 
-	mkdir work
+	mkdir work >/dev/null >[2=1] # shush
 	cd work
 
 	# Skip if not downloading and extracting
@@ -66,6 +66,7 @@ for(d in $dirs) {
 		switch($type) {
 		case archive
 			# Download and extract the archive file
+			fname = `{filename $source}
 			ext = `{extension $fname}
 	
 			echo Downloading from: $source

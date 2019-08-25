@@ -117,7 +117,7 @@ build -- Should fully build the port from source. Note that you'll be cd(1)'d in
 
 install -- Should install the port to `$ports/root` in a form consistent with the Plan 9 filesystem layout. 
 
-uninstall -- Should completely uninstall the port from `$ports/root` in a manner which affects only the port currently being uninstalled, so no wildcards, etc. 
+uninstall -- Should completely uninstall the port from `$ports/root` in a manner which affects only the port currently being uninstalled, so no wildcards, etc. Note that you will not be cd(1)'d into `$workroot` as the directory may not exist. 
 
 ### Optional functions
 
