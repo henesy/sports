@@ -1,0 +1,49 @@
+#!/bin/rc
+# Shim the root namespaces of each port into $ports/root and bind $ports/root over /
+# usage: ports/shim [foo/bar]
+
+# Import
+
+if(~ $ports '') {
+	echo '$ports variable not set, aborting.'
+	exit '$ports variable not set'
+}
+
+. $ports^/lib/port-common
+
+# Main logic
+
+dirs = ()
+
+if(~ $#* 0) {
+	dirs=(`{allinstalled | awk -F ':' '{print $1}'})
+}
+
+# If we have arguments, they're ports to install
+if(! ~ $#* 0) {
+	dirs = $ports^'/'^$*
+}
+
+echo $dirs
+
+for(d in $dirs) {
+	if(! test -e $d) {
+		exits 'dir does not exist: '^$d
+	}
+	
+	cd $d
+	
+	if(! test -e ./root) {
+		exits 'The root/ dir does not exist for port: '^$d
+	}
+	
+	bind $ports/root /n/oproot
+	unionfs -m $ports/root /n/oproot $ports/root
+}
+
+if(~ $#* 0) {
+	# Global union (default)
+	
+	bind / /n/oldroot
+	unionfs -m / /n/oldroot $ports/root
+}

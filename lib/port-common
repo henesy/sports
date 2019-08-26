@@ -1,5 +1,10 @@
 # Common functions for port/* commands
 
+# foo/bar = getprefix(bar)
+fn getprefix {
+	echo `{allports | grep $1}
+}
+
 # Lock the db
 fn dblock {
 	if(~ test -e $ports/ports.db.lock) {

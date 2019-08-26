@@ -6,6 +6,10 @@ Sports is a package manager for 9front intended to exist side by side with the e
 
 The name sports is an adjustment of ports while the 9front ports tree continues to exist: https://code.9front.org/hg/ports
 
+## Dependencies
+
+- unionfs(4) -- Written by kvik and available at: `git://code.a-b.link/unionfs`. This provides a recursive union for port root dirs. 
+
 ## Installation
 
 The recommended directory for installation is `/sys/ports`. 
@@ -19,11 +23,19 @@ Sports will install ports to `$ports/root`. As such, you should bind this direct
 For a user-specific installation, you could add the following to your `$home/profile`:
 
 	# Ports tree additions
-	portsroot=$home/ports
-	bind -a $ports/bin /
-	bind -a $ports/root /
+	ports=$home/repos/sports
+	bind -a $ports/bin /bin
+	port/shim
 
 ## Usage
+
+Union the ports root namespace into the current processes' namespace:
+
+	% port/shim
+	
+Union a single port's root namespace into the current process' namespace:
+
+	% port/shim games/breakout
 
 Update the ports tree:
 
@@ -77,6 +89,8 @@ Search for text in a port:
 Each port lives in a directory under the `$ports` root directory as per `$ports/category-subcategory/portname`. 
 
 Every port directory has a `port` file which is ingested by the `ports/*` scripts. 
+
+Additionally, each port has its own `root/` directory in which the port is installed. 
 
 A port may also contain a `patches/` directory which may be ingested by a `patch` function in the `port` file as described later. 
 

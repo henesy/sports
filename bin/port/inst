@@ -39,6 +39,8 @@ for(d in $dirs) {
 	if(! ~ `{installed $name} no) {
 		exits 'Port '^$name^' is already installed, aborting.'
 	}
+	
+	# TODO - resolve depends list
 
 	echo Installing port: $name
 	

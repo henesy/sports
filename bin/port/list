@@ -3,13 +3,6 @@
 # usage: port/list [-a] [foo/bar]
 rfork n;
 
-# Utility functions
-
-# foo/bar = getprefix(bar)
-fn getprefix {
-	echo `{allports | grep $1}
-}
-
 # Import
 
 if(~ $ports '') {

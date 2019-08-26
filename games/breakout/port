@@ -17,8 +17,9 @@ fn build {
 }
 
 fn install {
-	mkdir -p $ports/root/bin/games
-	cp 8.out $ports/root/bin/games/breakout
+	r = $ports/games/breakout/root
+	mkdir -p $r/bin/games
+	cp 8.out $r/bin/games/breakout
 }
 
 fn clean {
@@ -26,7 +27,8 @@ fn clean {
 }
 
 fn uninstall {
-	rm $ports/root/bin/games/breakout
+	r = $ports/games/breakout/root
+	rm $r/bin/games/breakout
 }
 
 fn patch {
